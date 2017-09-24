@@ -29,17 +29,20 @@ function basic_server_setup {
     	sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 	fi;
     service ssh reload
+    
+    ## host name config check
+    
+    if [$CONFIG_HOSTNAME = "true" ] then
+    	# Set hostname and FQDN
+    	sed -i 's/'${SERVER_IP}'.*/'${SERVER_IP}' '${HOSTNAME_FQDN}' '${HOSTNAME}'/' /etc/hosts
+    	echo "$HOSTNAME" > /etc/hostname
 
-    # Set hostname and FQDN
-    sed -i 's/'${SERVER_IP}'.*/'${SERVER_IP}' '${HOSTNAME_FQDN}' '${HOSTNAME}'/' /etc/hosts
-    echo "$HOSTNAME" > /etc/hostname
-
-    if [ $DISTRO = "Debian" ]; then
-        # Debian system, use hostname.sh
-        service hostname.sh start
-    else
-        # Ubuntu system, use hostname
-        service hostname start
+    		if [ $DISTRO = "Debian" ]; then
+        	# Debian system, use hostname.sh
+        	service hostname.sh start
+    		else
+        	# Ubuntu system, use hostname
+        	service hostname start
     fi
 
     # Basic hardening of sysctl.conf
