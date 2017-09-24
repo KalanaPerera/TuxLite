@@ -32,7 +32,7 @@ function basic_server_setup {
     
     ## host name config check
     
-    if [$CONFIG_HOSTNAME = "true" ] then
+    if [$CONFIG_HOSTNAME = "true" ]; then
     	# Set hostname and FQDN
     	sed -i 's/'${SERVER_IP}'.*/'${SERVER_IP}' '${HOSTNAME_FQDN}' '${HOSTNAME}'/' /etc/hosts
     	echo "$HOSTNAME" > /etc/hostname
@@ -43,7 +43,8 @@ function basic_server_setup {
     		else
         	# Ubuntu system, use hostname
         	service hostname start
-    fi
+    		fi
+	fi
 
     # Basic hardening of sysctl.conf
     sed -i 's/^#net.ipv4.conf.all.accept_source_route = 0/net.ipv4.conf.all.accept_source_route = 0/' /etc/sysctl.conf
